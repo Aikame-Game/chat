@@ -1,1 +1,34 @@
-/* CSS declarations go here */
+html { height: 100% }
+body { height: 100%; margin: 0px; padding: 0px }
+#chat{
+  height: 100%;
+  width: 25%;
+  float: left;
+  padding-top: 10px;
+}
+#chat ol{
+  margin: 0;
+}
+#chat .user-count{
+  text-align: center;
+  line-height: 2;
+}
+#map_canvas {
+  height: 100%;
+  width: 75%
+}
+.message{
+  list-style: none;
+  line-height: 150%;
+}
+#controlls{
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+}
+#controlls input{
+  margin-bottom: 20px;
+}
+#message-form{
+  display: none;
+}
