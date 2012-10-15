@@ -5,9 +5,30 @@
 <body>
   <div id="chat">
     {{> users}}
+    {{> controlls}}
+    {{> messages}}
   </div>
 </body>
 
 <template name="users">
   <div class="user-count">参加者 {{count}} 人</div>
+</template>
+
+<template name="controlls">
+  <div id="controlls">
+    <input id="input-message" type="text" placeholder="発言する" />
+    <input id="submit-message" type="button" value="発言" />
+  </div>
+</template>
+
+<template name="messages">
+  <ol>
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+  </ol>
+</template>
+
+<template name="message">
+  <li class="message">{{body}}</li>
 </template>
