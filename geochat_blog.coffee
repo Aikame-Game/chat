@@ -4,7 +4,14 @@ Message = new Meteor.Collection('messages')
 now_time = -> (new Date()).getTime() # 現在時刻取得
 
 if Meteor.isClient
+  map = null
   Meteor.startup ->
+    map_canvas = $('<div>').attr('id', 'map_canvas').appendTo('body')
+    map = new google.maps.Map map_canvas[0],
+      zoom: 6
+      center: new google.maps.LatLng(36.031332,137.805908)
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+
     unless User.find(_id: Session.get('user_id')).count() # Userが無かったら
       user_id = User.insert(last_keepalive: now_time()) # Userを新規作成
       Session.set('user_id', user_id) # user_idをSessionに記憶
