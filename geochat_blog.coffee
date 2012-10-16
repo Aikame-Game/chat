@@ -5,6 +5,7 @@ now_time = -> (new Date()).getTime() # 現在時刻取得
 
 if Meteor.isClient
   map = null
+  markers = {}
   Meteor.startup ->
     map_canvas = $('<div>').attr('id', 'map_canvas').appendTo('body')
     map = new google.maps.Map map_canvas[0],
@@ -29,6 +30,24 @@ if Meteor.isClient
   Template.message.body = ->
     @body
 
+  Template.users.users = ->
+    User.find()
+
+  Template.user.marker = ->
+    return unless map and @lng? and @lat?
+
+    position = new google.maps.LatLng(@lat, @lng)
+    if markers[@_id]
+      markers[@_id].setPosition(position) if position
+    else
+      markers[@_id] = new google.maps.Marker(position: position, map: map)
+    ''
+
+  Template.user.destroyed = ->
+    return unless markers[@data._id]?
+    markers[@data._id].setMap(null)
+    markers[@data._id] = null
+
   Template.controlls.events
     'click #submit-message': (e) ->
       Message.insert
@@ -36,6 +55,10 @@ if Meteor.isClient
         user_id: Session.get('user_id')
         created_at: now_time()
       $('#input-message').val('')
+
+    'click #set-current-position': ->
+      navigator.geolocation.getCurrentPosition (geo) ->
+        User.update {_id: Session.get('user_id')}, {$set: {lat: geo.coords.latitude, lng: geo.coords.longitude}}
 
 if Meteor.isServer
   batch_interval = 15*1000 # 15秒

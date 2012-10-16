@@ -14,10 +14,14 @@
 
 <template name="users">
   <div class="user-count">参加者 {{count}} 人</div>
+  {{#each users}}
+    {{> user}}
+  {{/each}}
 </template>
 
 <template name="controlls">
   <div id="controlls">
+    <input id="set-current-position" type="button" value="現在位置を公開する" /><br />
     <input id="input-message" type="text" placeholder="発言する" />
     <input id="submit-message" type="button" value="発言" />
   </div>
@@ -33,4 +37,8 @@
 
 <template name="message">
   <li class="message">{{body}}</li>
+</template>
+
+<template name="user">
+  {{marker}}
 </template>
