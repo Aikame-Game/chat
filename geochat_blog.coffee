@@ -62,6 +62,22 @@ if Meteor.isClient
     info_windows[@data._id] = null
 
   Template.controlls.events
+    'click #fit-bounds': ->
+      max_lat = max_lng = -Infinity
+      min_lat = min_lng = Infinity
+      for id, marker of markers
+        marker = marker.getPosition()
+        continue unless marker.lat() or marker.lng()
+        max_lat = marker.lat() if marker.lat() > max_lat
+        max_lng = marker.lng() if marker.lng() > max_lng
+        min_lat = marker.lat() if marker.lat() < min_lat
+        min_lng = marker.lng() if marker.lng() < min_lng
+
+      latlng_bounds = new google.maps.LatLngBounds(
+                        new google.maps.LatLng(min_lat, min_lng),
+                        new google.maps.LatLng(max_lat, max_lng))
+      map.fitBounds(latlng_bounds)
+
     'click #submit-message': (e) ->
       Message.insert
         body: $('#input-message').val()
