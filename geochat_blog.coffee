@@ -61,6 +61,7 @@ if Meteor.isClient
     info_windows[@data._id].close()
     info_windows[@data._id] = null
 
+  enter = false
   Template.controlls.events
     'click #fit-bounds': ->
       max_lat = max_lng = -Infinity
@@ -78,12 +79,19 @@ if Meteor.isClient
                         new google.maps.LatLng(max_lat, max_lng))
       map.fitBounds(latlng_bounds)
 
-    'click #submit-message': (e) ->
-      Message.insert
-        body: $('#input-message').val()
-        user_id: Session.get('user_id')
-        created_at: now_time()
-      $('#input-message').val('')
+
+    'keypress #input-message': (e) ->
+      enter = true if e.keyCode == 13
+
+     'keyup #input-message': (e) ->
+        return if e.keyCode != 13 or enter == false
+
+        Message.insert
+          body: $('#input-message').val()
+          user_id: Session.get('user_id')
+          created_at: now_time()
+        $('#input-message').val('')
+        enter = false
 
     'click #set-current-position': ->
       navigator.geolocation.getCurrentPosition (geo) ->
