@@ -29,6 +29,9 @@ body { height: 100%; margin: 0px; padding: 0px }
 #controlls input{
   margin-bottom: 20px;
 }
-#message-form{
+#input-message{
   display: none;
+}
+#rom{
+  font-size: 80%;
 }

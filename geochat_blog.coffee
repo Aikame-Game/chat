@@ -96,6 +96,8 @@ if Meteor.isClient
     'click #set-current-position': ->
       navigator.geolocation.getCurrentPosition (geo) ->
         User.update {_id: Session.get('user_id')}, {$set: {lat: geo.coords.latitude, lng: geo.coords.longitude}}
+        $('#input-message').show()
+        $('#rom').hide()
 
 if Meteor.isServer
   batch_interval = 15*1000 # 15秒
