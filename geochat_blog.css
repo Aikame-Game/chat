@@ -21,6 +21,10 @@ body { height: 100%; margin: 0px; padding: 0px }
   list-style: none;
   line-height: 150%;
 }
+.message small{
+  font-size: 11px;
+  color: #bababa;
+}
 #controlls{
   text-align: center;
   margin: 0px;

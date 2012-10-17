@@ -35,6 +35,10 @@ if Meteor.isClient
       info_windows[@user_id].open(map, markers[@user_id])
     @body
 
+  Template.message.created_at = ->
+    date = new Date(@created_at)
+    "#{date.getHours()}:#{date.getMinutes()}"
+
   Template.message.destroyed = ->
     info_windows[@data.user_id].close() if info_windows[@data.user_id]?
 
