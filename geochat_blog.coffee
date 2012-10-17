@@ -6,6 +6,8 @@ now_time = -> (new Date()).getTime() # 現在時刻取得
 if Meteor.isClient
   map = null
   markers = {}
+  info_windows = {}
+
   Meteor.startup ->
     map_canvas = $('<div>').attr('id', 'map_canvas').appendTo('body')
     map = new google.maps.Map map_canvas[0],
@@ -25,10 +27,16 @@ if Meteor.isClient
     User.find().count()
 
   Template.messages.messages = ->
-    Message.find()
+    Message.find({}, {sort: {created_at: -1}})
 
   Template.message.body = ->
+    if info_windows[@user_id]
+      info_windows[@user_id].setContent(@body)
+      info_windows[@user_id].open(map, markers[@user_id])
     @body
+
+  Template.message.destroyed = ->
+    info_windows[@data.user_id].close() if info_windows[@data.user_id]?
 
   Template.users.users = ->
     User.find()
@@ -41,12 +49,17 @@ if Meteor.isClient
       markers[@_id].setPosition(position) if position
     else
       markers[@_id] = new google.maps.Marker(position: position, map: map)
+      info_windows[@_id] = new google.maps.InfoWindow
     ''
 
   Template.user.destroyed = ->
     return unless markers[@data._id]?
     markers[@data._id].setMap(null)
     markers[@data._id] = null
+
+    return unless info_windows[@data._id]?
+    info_windows[@data._id].close()
+    info_windows[@data._id] = null
 
   Template.controlls.events
     'click #submit-message': (e) ->
